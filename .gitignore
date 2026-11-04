@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+*.log
+vendor/
+.DS_Store
+.idea/
+.vscode/
+
+# Local database credentials
+config.local.php
+labs/01-race-condition/config.local.php
