@@ -49,42 +49,43 @@ The expected behavior is that only one transfer succeeds.
 
 This laboratory is intended exclusively for controlled local testing.
 
-## Experimental Results
+## Actual Experimental Results
 
 ### Vulnerable Implementation
 
-Two concurrent requests attempted to transfer 80.00 USD
-from an account containing 100.00 USD.
+Two concurrent requests attempted to transfer
+80.00 USD from an account containing 100.00 USD.
 
 Observed results:
 
-- Both requests passed the balance validation.
+- Both requests read the initial balance of 10,000 cents.
+- Both passed the balance validation.
 - Both transfers were accepted.
-- The final account balance was -60.00 USD.
+- The final account balance was -6,000 cents.
 - Two transfer records were created.
 
 ### Secure Implementation
 
-The secure implementation uses:
+The same experiment was repeated using
+a database transaction and SELECT ... FOR UPDATE.
 
-- PDO database transactions.
-- InnoDB pessimistic row locking.
-- SELECT ... FOR UPDATE.
-- Server-side balance validation.
-- Atomic transaction commit and rollback.
+Observed results:
 
-Expected results:
-
-- One transfer is accepted.
-- The second transfer is rejected.
-- The final account balance is 20.00 USD.
-- Only one transfer record is created.
+- The first request acquired the row lock.
+- The first request transferred 80.00 USD.
+- The second request waited for the lock.
+- The second request read the updated balance of 2,000 cents.
+- The second transfer was rejected.
+- The final account balance remained 2,000 cents.
+- Only one transfer record was created.
 
 ### Conclusion
 
-The vulnerability was caused by a race condition
-between balance validation and account modification.
+The experiment demonstrates how a race condition
+can violate a business rule when balance validation
+and account modification are not properly synchronized.
 
-Pessimistic locking ensures that concurrent transactions
-cannot independently validate and debit the same account
-using the same outdated balance.
+Pessimistic row locking, combined with database
+transactions, prevents the demonstrated concurrent
+transfers from independently validating the same
+outdated account balance.
