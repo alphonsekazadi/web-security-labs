@@ -48,3 +48,43 @@ The expected behavior is that only one transfer succeeds.
 ## Safety
 
 This laboratory is intended exclusively for controlled local testing.
+
+## Experimental Results
+
+### Vulnerable Implementation
+
+Two concurrent requests attempted to transfer 80.00 USD
+from an account containing 100.00 USD.
+
+Observed results:
+
+- Both requests passed the balance validation.
+- Both transfers were accepted.
+- The final account balance was -60.00 USD.
+- Two transfer records were created.
+
+### Secure Implementation
+
+The secure implementation uses:
+
+- PDO database transactions.
+- InnoDB pessimistic row locking.
+- SELECT ... FOR UPDATE.
+- Server-side balance validation.
+- Atomic transaction commit and rollback.
+
+Expected results:
+
+- One transfer is accepted.
+- The second transfer is rejected.
+- The final account balance is 20.00 USD.
+- Only one transfer record is created.
+
+### Conclusion
+
+The vulnerability was caused by a race condition
+between balance validation and account modification.
+
+Pessimistic locking ensures that concurrent transactions
+cannot independently validate and debit the same account
+using the same outdated balance.
