@@ -27,7 +27,8 @@ The expected behavior is that only one transfer succeeds.
 - `config.example.php`: Example local configuration.
 - `database.sql`: Database schema.
 - `reset.php`: Restore the initial account state.
-- `vulnerable.php`: Intentionally vulnerable transfer implementation.
+- `vulnerable.php`: Intentionally vulnerable implementation.
+- `secure.php`: Protected implementation using database locking.
 
 ## Planned Experiments
 
