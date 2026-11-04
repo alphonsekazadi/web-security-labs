@@ -37,4 +37,4 @@ to test.
 
 ## License
 
-To be defined.
+[MIT](LICENSE)
