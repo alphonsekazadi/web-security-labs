@@ -23,7 +23,6 @@ and defensive techniques.
 - PHP
 - MySQL / MariaDB
 - PDO
-- Git
 
 ## Environment
 
